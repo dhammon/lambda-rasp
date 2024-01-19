@@ -807,6 +807,166 @@ pub fn rules_inbound() -> Vec<Rule> {
             re: r#"(?i)(?:\([\s\v]*?select[\s\v]*?[0-9A-Z_a-z]+|coalesce|order[\s\v]+by[\s\v]+if[0-9A-Z_a-z]*?)[\s\v]*?\(|\*/from|\+[\s\v]*?[0-9]+[\s\v]*?\+[\s\v]*?@|[0-9A-Z_a-z]["'`][\s\v]*?(?:(?:[\+\-=@\|]+[\s\v]+?)+|[\+\-=@\|]+)[\(0-9]|@@[0-9A-Z_a-z]+[\s\v]*?[^\s\v0-9A-Z_a-z]|[^0-9A-Z_a-z]!+["'`][0-9A-Z_a-z]|["'`](?:;[\s\v]*?(?:if|while|begin)|[\s\v0-9]+=[\s\v]*?[0-9])|[\s\v\(]+case[0-9]*?[^0-9A-Z_a-z].+[tw]hen[\s\v\(]"#.to_string(),
         },
 
+        // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L997
+        // index 77
+        Rule {
+            id: 942330,
+            class: "SQLI".to_string(),
+            severity: "CRITICAL".to_string(),
+            desc: "Detects classic SQL injection probings 1/3".to_string(),
+            re: r#"(?i)["'`][\s\v]*?\b(?:x?or|div|like|between|and)\b[\s\v]*?["'`]?[0-9]|\x5cx(?:2[37]|3d)|^(?:.?["'`]$|["'\x5c`]*?(?:["'0-9`]+|[^"'`]+["'`])[\s\v]*?\b(?:and|n(?:and|ot)|(?:xx?)?or|div|like|between|\|\||&&)\b[\s\v]*?["'0-9A-Z_-z][!&\(-\)\+-\.@])|[^\s\v0-9A-Z_a-z][0-9A-Z_a-z]+[\s\v]*?[\-\|][\s\v]*?["'`][\s\v]*?[0-9A-Z_a-z]|@(?:[0-9A-Z_a-z]+[\s\v]+(?:and|x?or|div|like|between)\b[\s\v]*?["'0-9`]+|[\-0-9A-Z_a-z]+[\s\v](?:and|x?or|div|like|between)\b[\s\v]*?[^\s\v0-9A-Z_a-z])|[^\s\v0-:A-Z_a-z][\s\v]*?[0-9][^0-9A-Z_a-z]+[^\s\v0-9A-Z_a-z][\s\v]*?["'`].|[^0-9A-Z_a-z]information_schema|table_name[^0-9A-Z_a-z]"#.to_string(),
+        },
+
+        // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L1026
+        // index 78
+        Rule {
+            id: 942340,
+            class: "SQLI".to_string(),
+            severity: "CRITICAL".to_string(),
+            desc: "Detects basic SQL authentication bypass attempts 3/3".to_string(),
+            re: r#"(?i)in[\s\v]*?\(+[\s\v]*?select|(?:(?:(?i:N)?AND|(?i:X)?(?i:X)?OR|DIV|LIKE|BETWEEN|NOT)[\s\v]+|(?:\|\||&&)[\s\v]*)[\s\v\+0-9A-Z_a-z]+(?:regexp[\s\v]*?\(|sounds[\s\v]+like[\s\v]*?["'`]|[0-9=]+x)|["'`](?:[\s\v]*?(?:[0-9][\s\v]*?(?:--|#)|is[\s\v]*?(?:[0-9].+["'`]?[0-9A-Z_a-z]|[\.0-9]+[\s\v]*?[^0-9A-Z_a-z].*?["'`]))|[%-&<->\^]+[0-9][\s\v]*?(?:=|x?or|div|like|between|and)|(?:[^0-9A-Z_a-z]+[\+\-0-9A-Z_a-z]+[\s\v]*?=[\s\v]*?[0-9][^0-9A-Z_a-z]+|\|?[\-0-9A-Z_a-z]{3,}[^\s\v,\.0-9A-Z_a-z]+)["'`]|[\s\v]*(?:(?:(?i:N)?AND|(?i:X)?(?i:X)?OR|DIV|LIKE|BETWEEN|NOT)[\s\v]+|(?:\|\||&&)[\s\v]*)(?:array[\s\v]*\[|[0-9A-Z_a-z]+(?:[\s\v]*!?~|[\s\v]+(?:not[\s\v]+)?similar[\s\v]+to[\s\v]+)|(?:tru|fals)e\b))|\bexcept[\s\v]+(?:select\b|values[\s\v]*?\()"#.to_string(),
+        },
+
+        // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L1051
+        // index 79
+        Rule {
+            id: 942361,
+            class: "SQLI".to_string(),
+            severity: "CRITICAL".to_string(),
+            desc: "Detects basic SQL injection based on keyword alter or union".to_string(),
+            re: r#"(?i:[\W\d]+\s*?(?:alter|union)\b)"#.to_string(),
+        },
+
+        // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L1081
+        // index 80
+        Rule {
+            id: 942362,
+            class: "SQLI".to_string(),
+            severity: "CRITICAL".to_string(),
+            desc: "Detects concatenated basic SQL injection and SQLLFI attempts".to_string(),
+            re: r#"(?i)(?:alter|(?:(?:cre|trunc|upd)at|renam)e|de(?:lete|sc)|(?:inser|selec)t|load)[\s\v]+(?:char|group_concat|load_file)[\s\v]?\(?|end[\s\v]*?\);|[\s\v\(]load_file[\s\v]*?\(|["'`][\s\v]+regexp[^0-9A-Z_a-z]|[^A-Z_a-z][\s\v]+as\b[\s\v]*["'0-9A-Z_-z]+[\s\v]*\bfrom|[^A-Z_a-z]+[\s\v]*?(?:create[\s\v]+[0-9A-Z_a-z]+|(?:d(?:e(?:lete|sc)|rop)|(?:inser|selec)t|load|(?:renam|truncat)e|u(?:pdate|nion[\s\v]*(?:all|(?:sele|distin)ct))|alter[\s\v]*(?:a(?:(?:ggregat|pplication[\s\v]*rol)e|s(?:sembl|ymmetric[\s\v]*ke)y|u(?:dit|thorization)|vailability[\s\v]*group)|b(?:roker[\s\v]*priority|ufferpool)|c(?:ertificate|luster|o(?:l(?:latio|um)|nversio)n|r(?:edential|yptographic[\s\v]*provider))|d(?:atabase|efault|i(?:mension|skgroup)|omain)|e(?:(?:ndpoi|ve)nt|xte(?:nsion|rnal))|f(?:lashback|oreign|u(?:lltext|nction))|hi(?:erarchy|stogram)|group|in(?:dex(?:type)?|memory|stance)|java|l(?:a(?:ngua|r)ge|ibrary|o(?:ckdown|g(?:file[\s\v]*group|in)))|m(?:a(?:s(?:k|ter[\s\v]*key)|terialized)|e(?:ssage[\s\v]*type|thod)|odule)|(?:nicknam|queu)e|o(?:perator|utline)|p(?:a(?:ckage|rtition)|ermission|ro(?:cedur|fil)e)|r(?:e(?:mot|sourc)e|o(?:l(?:e|lback)|ute))|s(?:chema|e(?:arch|curity|rv(?:er|ice)|quence|ssion)|y(?:mmetric[\s\v]*key|nonym)|togroup)|t(?:able(?:space)?|ext|hreshold|r(?:igger|usted)|ype)|us(?:age|er)|view|w(?:ork(?:load)?|rapper)|x(?:ml[\s\v]*schema|srobject)))\b)"#.to_string(),
+        },
+
+        // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L1113
+        // index 81
+        Rule {
+            id: 942370,
+            class: "SQLI".to_string(),
+            severity: "CRITICAL".to_string(),
+            desc: "Detects classic SQL injection probings 2/3".to_string(),
+            re: r#"(?i)["'`](?:[\s\v]*?(?:(?:\*.+(?:x?or|div|like|between|(?:an|i)d)[^0-9A-Z_a-z]*?["'`]|(?:x?or|div|like|between|and)[\s\v][^0-9]+[\-0-9A-Z_a-z]+.*?)[0-9]|[^\s\v0-9\?A-Z_a-z]+[\s\v]*?[^\s\v0-9A-Z_a-z]+[\s\v]*?["'`]|[^\s\v0-9A-Z_a-z]+[\s\v]*?[^A-Z_a-z].*?(?:#|--))|.*?\*[\s\v]*?[0-9])|\^["'`]|[%\(-\+\-<>][\-0-9A-Z_a-z]+[^\s\v0-9A-Z_a-z]+["'`][^,]"#.to_string(),
+        },
+
+        // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L1139
+        // index 82
+        Rule {
+            id: 942380,
+            class: "SQLI".to_string(),
+            severity: "CRITICAL".to_string(),
+            desc: "SQL Injection Attack".to_string(),
+            re: r#"(?i)\b(?:having\b(?:[\s\v]+(?:[0-9]{1,10}|'[^=]{1,10}')[\s\v]*?[<->]| ?(?:[0-9]{1,10} ?[<->]+|["'][^=]{1,10}[ "'<-\?\[]+))|ex(?:ecute(?:\(|[\s\v]{1,5}[\$\.0-9A-Z_a-z]{1,5}[\s\v]{0,3})|ists[\s\v]*?\([\s\v]*?select\b)|(?:create[\s\v]+?table.{0,20}?|like[^0-9A-Z_a-z]*?char[^0-9A-Z_a-z]*?)\()|select.*?case|from.*?limit|order[\s\v]by|exists[\s\v](?:[\s\v]select|s(?:elect[^\s\v](?:if(?:null)?[\s\v]\(|top|concat)|ystem[\s\v]\()|\bhaving\b[\s\v]+[0-9]{1,10}|'[^=]{1,10}')"#.to_string(),
+        },
+
+        // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L1165
+        // index 83
+        Rule {
+            id: 942390,
+            class: "SQLI".to_string(),
+            severity: "CRITICAL".to_string(),
+            desc: "SQL Injection Attack".to_string(),
+            re: r#"(?i)\b(?:or\b(?:[\s\v]?(?:[0-9]{1,10}|["'][^=]{1,10}["'])[\s\v]?[<->]+|[\s\v]+(?:[0-9]{1,10}|'[^=]{1,10}')(?:[\s\v]*?[<->])?)|xor\b[\s\v]+(?:[0-9]{1,10}|'[^=]{1,10}')(?:[\s\v]*?[<->])?)|'[\s\v]+x?or[\s\v]+.{1,20}[!\+\-<->]"#.to_string(),
+        },
+
+        // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L1191
+        // index 84
+        Rule {
+            id: 942400,
+            class: "SQLI".to_string(),
+            severity: "CRITICAL".to_string(),
+            desc: "SQL Injection Attack".to_string(),
+            re: r#"(?i)\band\b(?:[\s\v]+(?:[0-9]{1,10}[\s\v]*?[<->]|'[^=]{1,10}')| ?(?:[0-9]{1,10}|["'][^=]{1,10}["']) ?[<->]+)"#.to_string(),
+        },
+
+        // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L1222
+        // index 85
+        Rule {
+            id: 942410,
+            class: "SQLI".to_string(),
+            severity: "CRITICAL".to_string(),
+            desc: "SQL Injection Attack".to_string(),
+            re: r#"(?i)\b(?:a(?:(?:b|co)s|dd(?:dat|tim)e|es_(?:de|en)crypt|s(?:in|cii(?:str)?)|tan2?|vg)|b(?:enchmark|i(?:n(?:_to_num)?|t_(?:and|count|length|x?or)))|c(?:ast|h(?:ar(?:(?:acter)?_length|set)?|r)|iel(?:ing)?|o(?:alesce|ercibility|(?:mpres)?s|n(?:cat(?:_ws)?|nection_id|v(?:ert(?:_tz)?)?)|(?:un)?t)|r32|ur(?:(?:dat|tim)e|rent_(?:date|time(?:stamp)?|user)))|d(?:a(?:t(?:abase|e(?:_(?:add|format|sub)|diff)?)|y(?:name|of(?:month|week|year))?)|count|e(?:code|(?:faul|s_(?:de|en)cryp)t|grees)|ump)|e(?:lt|nc(?:ode|rypt)|x(?:p(?:ort_set)?|tract(?:value)?))|f(?:i(?:eld(?:_in_set)?|nd_in_set)|loor|o(?:rmat|und_rows)|rom_(?:base64|days|unixtime))|g(?:et_(?:format|lock)|r(?:eates|oup_conca)t)|h(?:ex(?:toraw)?|our)|i(?:f(?:null)?|n(?:et6?_(?:aton|ntoa)|s(?:ert|tr)|terval)?|s(?:_(?:(?:free|used)_lock|ipv(?:4(?:_(?:compat|mapped))?|6)|n(?:ot(?:_null)?|ull))|null)?)|l(?:ast(?:_(?:day|insert_id))?|case|e(?:(?:as|f)t|ngth)|n|o(?:ad_file|ca(?:l(?:timestamp)?|te)|g(?:10|2)?|wer)|pad|trim)|m(?:a(?:ke(?:date|_set)|ster_pos_wait|x)|d5|i(?:(?:crosecon)?d|n(?:ute)?)|o(?:d|nth(?:name)?))|n(?:ame_const|o(?:t_in|w)|ullif)|o(?:ct(?:et_length)?|(?:ld_passwo)?rd)|p(?:assword|eriod_(?:add|diff)|g_sleep|i|o(?:sition|w(?:er)?)|rocedure_analyse)|qu(?:arter|ote)|r(?:a(?:dians|nd|wto(?:hex|nhex(?:toraw)?))|e(?:lease_lock|p(?:eat|lace)|verse)|ight|o(?:und|w_count)|pad|trim)|s(?:chema|e(?:c(?:ond|_to_time)|ssion_user)|ha[1-2]?|ig?n|leep|oundex|pace|qrt|t(?:d(?:dev(?:_(?:po|sam)p)?)?|r(?:cmp|_to_date))|u(?:b(?:(?:dat|tim)e|str(?:ing(?:_index)?)?)|m)|ys(?:date|tem_user))|t(?:an|ime(?:diff|_(?:format|to_sec)|stamp(?:add|diff)?)?|o_(?:base64|n?char|(?:day|second)s)|r(?:im|uncate))|u(?:case|n(?:compress(?:ed_length)?|hex|ix_timestamp)|p(?:datexml|per)|ser|tc_(?:date|time(?:stamp)?)|uid(?:_short)?)|v(?:a(?:lues|r(?:iance|_(?:po|sam)p))|ersion)|we(?:ek(?:day|ofyear)?|ight_string)|xmltype|year(?:week)?)[^0-9A-Z_a-z]*?\("#.to_string(),
+        },
+
+        // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L1251
+        // index 86
+        Rule {
+            id: 942470,
+            class: "SQLI".to_string(),
+            severity: "CRITICAL".to_string(),
+            desc: "SQL Injection Attack".to_string(),
+            re: r#"(?i)autonomous_transaction|(?:current_use|n?varcha|tbcreato)r|db(?:a_users|ms_java)|open(?:owa_util|query|rowset)|s(?:p_(?:(?:addextendedpro|sqlexe)c|execute(?:sql)?|help|is_srvrolemember|makewebtask|oacreate|p(?:assword|repare)|replwritetovarbin)|ql_(?:longvarchar|variant))|utl_(?:file|http)|xp_(?:availablemedia|(?:cmdshel|servicecontro)l|dirtree|e(?:numdsn|xecresultset)|filelist|loginconfig|makecab|ntsec(?:_enumdomains)?|reg(?:addmultistring|delete(?:key|value)|enum(?:key|value)s|re(?:ad|movemultistring)|write)|terminate(?:_process)?)"#.to_string(),
+        },
+
+        // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L1280
+        // index 87
+        Rule {
+            id: 942480,
+            class: "SQLI".to_string(),
+            severity: "CRITICAL".to_string(),
+            desc: "SQL Injection Attack".to_string(),
+            re: r#"(?i)\b(?:(?:d(?:bms_[0-9A-Z_a-z]+\.|elete\b[^0-9A-Z_a-z]*?\bfrom)|(?:group\b.*?\bby\b.{1,100}?\bhav|overlay\b[^0-9A-Z_a-z]*?\(.*?\b[^0-9A-Z_a-z]*?plac)ing|in(?:ner\b[^0-9A-Z_a-z]*?\bjoin|sert\b[^0-9A-Z_a-z]*?\binto|to\b[^0-9A-Z_a-z]*?\b(?:dump|out)file)|load\b[^0-9A-Z_a-z]*?\bdata\b.*?\binfile|s(?:elect\b.{1,100}?\b(?:(?:.*?\bdump\b.*|(?:count|length)\b.{1,100}?)\bfrom|(?:data_typ|from\b.{1,100}?\bwher)e|instr|to(?:_(?:cha|numbe)r|p\b.{1,100}?\bfrom))|ys_context)|u(?:nion\b.{1,100}?\bselect|tl_inaddr))\b|print\b[^0-9A-Z_a-z]*?@@)|(?:collation[^0-9A-Z_a-z]*?\(a|@@version|;[^0-9A-Z_a-z]*?\b(?:drop|shutdown))\b|'(?:dbo|msdasql|s(?:a|qloledb))'"#.to_string(),
+        },
+
+        // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L1321
+        // index 88
+        Rule {
+            id: 942430,
+            class: "SQLI".to_string(),
+            severity: "CRITICAL".to_string(),
+            desc: "Restricted SQL Character Anomaly Detection (args): # of special characters exceeded (12)".to_string(),
+            re: r#"((?:[~!@#\$%\^&\*\(\)\-\+=\{\}\[\]\|:;"'´’‘`<>][^~!@#\$%\^&\*\(\)\-\+=\{\}\[\]\|:;"'´’‘`<>]*?){12})"#.to_string(),
+        },
+
+        // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L1379
+        // index 89
+        Rule {
+            id: 942440,
+            class: "SQLI".to_string(),
+            severity: "CRITICAL".to_string(),
+            desc: "SQL Comment Sequence Detected".to_string(),
+            re: r#"/\*!?|\*/|[';]--|--(?:[\s\v]|[^\-]*?-)|[^&\-]#.*?[\s\v]|;?\x00"#.to_string(),
+        },
+
+        // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L1410
+        // index 90
+        Rule {
+            id: 942450,
+            class: "SQLI".to_string(),
+            severity: "CRITICAL".to_string(),
+            desc: "SQL Hex Encoding Identified".to_string(),
+            re: r#"(?i:\b0x[a-f\d]{3,})"#.to_string(),
+        },
+
+        // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L1459
+        // index 91
+        Rule {
+            id: 942510,
+            class: "SQLI".to_string(),
+            severity: "CRITICAL".to_string(),
+            desc: "SQLi bypass attempt by ticks or backticks detected".to_string(),
+            re: r#"(?:`(?:(?:[\w\s=_\-+{}()<@]){2,29}|(?:[A-Za-z0-9+/]{4})+(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?)`)"#.to_string(),
+        },
+
+        // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L1486
+        // index 92
+        Rule {
+            id: 942520,
+            class: "SQLI".to_string(),
+            severity: "CRITICAL".to_string(),
+            desc: "Detects basic SQL authentication bypass attempts 4.0/4".to_string(),
+            re: r#"(?i)["'`][\s\v]*?(?:(?:is[\s\v]+not|not[\s\v]+(?:like|glob|(?:betwee|i)n|null|regexp|match)|mod|div|sounds[\s\v]+like)\b|[%-&\*-\+\-/<->\^\|])"#.to_string(),
+        },
+
     ];
     
     rules
@@ -816,6 +976,199 @@ pub fn rules_inbound() -> Vec<Rule> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    
+    
+    #[test]
+    fn rule_sqli_942520_true() {
+        let rules = rules_inbound();
+        let rule = &rules[92];
+        let data: Bytes =  Bytes::from_static(b"{\"key\": \"lol=' OR '1' = '1 # lol\"}");
+        let cap = search(rule, data);
+        println!("Cap: {:?}", cap);
+        
+        assert!(!cap.is_empty());
+        assert_eq!(cap, "' =");
+    }
+    
+    #[test]
+    fn rule_sqli_942510_true() {
+        let rules = rules_inbound();
+        let rule = &rules[91];
+        let data: Bytes =  Bytes::from_static(b"{\"key\": \"# 0/**/union/*!50000select*/table_name`foo`/**/\"}");
+        let cap = search(rule, data);
+        println!("Cap: {:?}", cap);
+        
+        assert!(!cap.is_empty());
+        assert_eq!(cap, "`foo`");
+    }
+    
+    #[test]
+    fn rule_sqli_942450_true() {
+        let rules = rules_inbound();
+        let rule = &rules[90];
+        let data: Bytes =  Bytes::from_static(b"{\"key\": \"' OR 0xf00d  -- -\"}");
+        let cap = search(rule, data);
+        println!("Cap: {:?}", cap);
+        
+        assert!(!cap.is_empty());
+        assert_eq!(cap, "0xf00d");
+    }
+    
+    #[test]
+    fn rule_sqli_942440_true() {
+        let rules = rules_inbound();
+        let rule = &rules[89];
+        let data: Bytes =  Bytes::from_static(b"{\"key\": \"lol=' OR '1' = '1 -- -\"}");
+        let cap = search(rule, data);
+        println!("Cap: {:?}", cap);
+        
+        assert!(!cap.is_empty());
+        assert_eq!(cap, "-- ");
+    }
+    
+    #[test]
+    fn rule_sqli_942430_true() {
+        let rules = rules_inbound();
+        let rule = &rules[88];
+        let data: Bytes =  Bytes::from_static(b"{\"key\": \",(select * from (select(sleep(10)))a)\"}");
+        let cap = search(rule, data);
+        println!("Cap: {:?}", cap);
+        
+        assert!(!cap.is_empty());
+        assert_eq!(cap, "{\"key\": \",(select * from (select(sleep(10))");
+    }
+    
+    #[test]
+    fn rule_sqli_942480_true() {
+        let rules = rules_inbound();
+        let rule = &rules[87];
+        let data: Bytes =  Bytes::from_static(b"{\"key\": \"' GROUP BY columnnames having 1=1 --\"}");
+        let cap = search(rule, data);
+        println!("Cap: {:?}", cap);
+        
+        assert!(!cap.is_empty());
+        assert_eq!(cap, "GROUP BY columnnames having");
+    }
+    
+    #[test]
+    fn rule_sqli_942470_true() {
+        let rules = rules_inbound();
+        let rule = &rules[86];
+        let data: Bytes =  Bytes::from_static(b"{\"key\": \"lol=autonomous_transaction lol\"}");
+        let cap = search(rule, data);
+        println!("Cap: {:?}", cap);
+        
+        assert!(!cap.is_empty());
+        assert_eq!(cap, "autonomous_transaction");
+    }
+    
+    #[test]
+    fn rule_sqli_942410_true() {
+        let rules = rules_inbound();
+        let rule = &rules[85];
+        let data: Bytes =  Bytes::from_static(b"{\"key\": \"lol=' AND MID(VERSION(),1,1) = '5';\"}");
+        let cap = search(rule, data);
+        println!("Cap: {:?}", cap);
+        
+        assert!(!cap.is_empty());
+        assert_eq!(cap, "MID(");
+    }
+    
+    #[test]
+    fn rule_sqli_942400_true() {
+        let rules = rules_inbound();
+        let rule = &rules[84];
+        let data: Bytes =  Bytes::from_static(b"{\"key\": \"lol = and 'lol'; -- -\"}");
+        let cap = search(rule, data);
+        println!("Cap: {:?}", cap);
+        
+        assert!(!cap.is_empty());
+        assert_eq!(cap, "and 'lol'");
+    }
+    
+    #[test]
+    fn rule_sqli_942390_true() {
+        let rules = rules_inbound();
+        let rule = &rules[83];
+        let data: Bytes =  Bytes::from_static(b"{\"key\": \"lol=' OR '1' = '1 #\"}");
+        let cap = search(rule, data);
+        println!("Cap: {:?}", cap);
+        
+        assert!(!cap.is_empty());
+        assert_eq!(cap, "' OR '1' =");
+    }
+    
+    #[test]
+    fn rule_sqli_942380_true() {
+        let rules = rules_inbound();
+        let rule = &rules[82];
+        let data: Bytes =  Bytes::from_static(b"{\"key\": \"1' ORDER BY 1--+\"}");
+        let cap = search(rule, data);
+        println!("Cap: {:?}", cap);
+        
+        assert!(!cap.is_empty());
+        assert_eq!(cap, "ORDER BY");
+    }
+    
+    #[test]
+    fn rule_sqli_942370_true() {
+        let rules = rules_inbound();
+        let rule = &rules[81];
+        let data: Bytes =  Bytes::from_static(b"{\"key\": \"lol=' AND MID(VERSION(),1,1) = '5';\"}");
+        let cap = search(rule, data);
+        println!("Cap: {:?}", cap);
+        
+        assert!(!cap.is_empty());
+        assert_eq!(cap, "' AND MID(VERSION(),1,1");
+    }
+    
+    #[test]
+    fn rule_sqli_942362_true() {
+        let rules = rules_inbound();
+        let rule = &rules[80];
+        let data: Bytes =  Bytes::from_static(b"{\"key\": \"lol=-1' UNION SELECT 1,2,3--+\"}");
+        let cap = search(rule, data);
+        println!("Cap: {:?}", cap);
+        
+        assert!(!cap.is_empty());
+        assert_eq!(cap, "=-1' UNION SELECT");
+    }
+    
+    #[test]
+    fn rule_sqli_942361_true() {
+        let rules = rules_inbound();
+        let rule = &rules[79];
+        let data: Bytes =  Bytes::from_static(b"{\"key\": \"-1' UNION SELECT 1,2,3--+\"}");
+        let cap = search(rule, data);
+        println!("Cap: {:?}", cap);
+        
+        assert!(!cap.is_empty());
+        assert_eq!(cap, "\": \"-1' UNION");
+    }
+    
+    #[test]
+    fn rule_sqli_942340_true() {
+        let rules = rules_inbound();
+        let rule = &rules[78];
+        let data: Bytes =  Bytes::from_static(b"{\"key\": \"' and 1 in (select min(name) from sysobjects where xtype = 'U' and name > '.') --\"}");
+        let cap = search(rule, data);
+        println!("Cap: {:?}", cap);
+        
+        assert!(!cap.is_empty());
+        assert_eq!(cap, "in (select");
+    }
+    
+    #[test]
+    fn rule_sqli_942330_true() {
+        let rules = rules_inbound();
+        let rule = &rules[77];
+        let data: Bytes =  Bytes::from_static(b"{\"key\": \"' AND MID(VERSION(),1,1) = '5';\"}");
+        let cap = search(rule, data);
+        println!("Cap: {:?}", cap);
+        
+        assert!(!cap.is_empty());
+        assert_eq!(cap, ",1) = '5");
+    }
     
     #[test]
     fn rule_sqli_942310_true() {

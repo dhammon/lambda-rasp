@@ -18,7 +18,7 @@ use nix:: {
 
 #[allow(dead_code)]
 //local pid heap addr; printf "%d\n" 0x$(sudo cat /proc/1/maps | grep heap | awk -F"-" '{print $1}') 
-const TEST_ADDRESS: usize = 94488703238144;
+const TEST_ADDRESS: usize = 94185473482752;
 const TARGET_PID: i32 = 1;
 const TARGET_ENV_VAR: &[u8] = b"127.0.0.1:9001";
 const NEW_ENV_VAR: &[u8] = b"127.0.0.1:8888";
