@@ -4,7 +4,7 @@ use proxy::memory::{patch_rapid};
 use proxy::server::{start_api_svr};
 use lambda_extension::{service_fn, Error, LambdaEvent, NextEvent};
 
-const VERBOSE: bool = true;
+const VERBOSE: bool = false;
 const FAIL_OPEN: bool = false;
 const BLOCKING_MODE: bool = true;
 
