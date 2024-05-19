@@ -18,15 +18,16 @@ use nix:: {
 
 #[allow(dead_code)]
 //local pid heap addr; printf "%d\n" 0x$(sudo cat /proc/1/maps | grep heap | awk -F"-" '{print $1}') 
-const TEST_ADDRESS: usize = 94584240660480;
+const TEST_ADDRESS: usize = 94089611788288;
 const TARGET_PID: i32 = 1;
 const TARGET_ENV_VAR: &[u8] = b"127.0.0.1:9001";
 const NEW_ENV_VAR: &[u8] = b"127.0.0.1:8888";
 
 
 pub fn patch_rapid() -> Result<(), Box<dyn Error>> {
-    let heap_start: usize = 824633720832;  //0xc000000000
-    let heap_end: usize = 824637915136;  //0xc000400000
+    //local heap start and end: ps aux | grep lambda; cat /proc/1/maps | grep heap
+    let heap_start: usize = 0xc000000000;
+    let heap_end: usize = 0xc000400000;
     let mut writes = 0;
     let step: usize = 0x10000;
     let mut lbuf = vec![0; step];

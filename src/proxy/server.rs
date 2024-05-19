@@ -71,6 +71,7 @@ async fn hook_next(req: Request<Body>) -> Result<Response<Body>, Box<dyn Error>>
 
 
 #[tokio::test]
+#[should_panic(expected = "[-] Attack detected")]
 async fn hook_next_test() {
     let data = Bytes::from_static(b"{\"lol\": \"value\"}");
     let payload = Body::from(data);
@@ -142,6 +143,7 @@ async fn rapid_proxy(req: Request<Body>) -> Result<Response<Body>, Infallible> {
 
 
 #[tokio::test]
+#[should_panic(expected = "[-] Attack detected")]
 async fn rapid_proxy_test_next() {
     let data = Bytes::from_static(b"{\"lol\": \"value\"}");
     let payload = Body::from(data);
@@ -150,8 +152,7 @@ async fn rapid_proxy_test_next() {
         .uri("http://127.0.0.1:9002/2018-06-01/runtime/invocation/next")
         .body(payload)
         .unwrap();
-    let response = rapid_proxy(mock_req).await.unwrap();
-    assert_eq!(response.status(), 404);
+    rapid_proxy(mock_req).await.unwrap();
 }
 
 

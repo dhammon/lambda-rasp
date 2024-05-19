@@ -7,6 +7,23 @@ use lambda_extension::{service_fn, Error, LambdaEvent, NextEvent};
 const VERBOSE: bool = false;
 const FAIL_OPEN: bool = false;
 const BLOCKING_MODE: bool = true;
+const RULE_MODE: u32 = 0; //0=performance; 1=balanced; 2=paranoid
+const RULE_CLASS: &'static [&'static str] = &[
+    //"LFI", 
+    //"RFI",
+    "RCE",
+    //"DESERIAL",
+    //"PP",
+    //"DOS",
+    //"SSRF",
+    //"XSS",
+    //"TEMPLATE",
+    "SQLI",
+    //"NOSQLI",
+    //"FIXATION",
+    //"UPLOAD",
+];
+
 
 async fn ls_ext(event: LambdaEvent) -> Result<(), Error> {
     match event.next {
@@ -22,6 +39,9 @@ async fn ls_ext(event: LambdaEvent) -> Result<(), Error> {
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
+    if crate::VERBOSE {
+        println!("[+] Starting Layer");
+    }
     //TODO proxy switch
     //TODO don't unwrap, use error handling
     patch_rapid().unwrap();
