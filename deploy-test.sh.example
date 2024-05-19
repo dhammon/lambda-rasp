@@ -1,0 +1,39 @@
+#!/bin/bash
+runtimes=python3.8
+function=<some_function_name>
+layer=arn:aws:lambda:<region>:<account_number>:layer:<some_layer_name>
+payload='{"key1":"value1"}'
+#payload='{"key1":"value1/../../test"}'
+
+#Build
+echo "[+] Building Extension"
+build_result=$(cargo lambda build --extension --release)
+echo $build_result
+
+#Deploy
+echo "[+] Deploying Layer"
+deploy_result=$(cargo lambda deploy --extension --compatible-runtimes $runtimes)
+version=$(echo $deploy_result | awk -F":" '{print $9}')
+echo "[+] Layer version $version deployed"
+
+#Update lambda function to use new layer version
+echo "[+] Updating Function with new layer version"
+lambda_update=$(aws lambda update-function-configuration \
+    --function-name $function \
+    --layers $layer:$version)
+echo "[+] Function layer version updated"
+
+#Run test
+echo "[+] Test function"
+sleep 10
+invoke_result=$(aws lambda invoke \
+    --function-name $function \
+    --cli-binary-format raw-in-base64-out \
+    --payload $payload \
+    /tmp/lambda_invoke.log)
+echo "$invoke_result"
+
+
+#return Result
+echo "[!] Use \"aws logs tail /aws/lambda/$function --follow\" to follow the log stream"
+

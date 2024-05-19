@@ -1,14 +1,13 @@
 
-use regex::Regex;
-use hyper::body::Bytes;
-use std::str;
 
 //TODO introduce block/monitoring mode per rule
+//  0-10=performance; 11-99=balanced; 100+ = paranoid
 //TODO deny lists, incl 941180
 //TODO performance cost per rule and class
 //TODO rules_outbound
 //TODO global config enable/disable by severity, class, inbound/outbound, etc
 //TODO regex of libinjection for sqli and xss "detectSQLi" libs (no regex exists)
+
 
 #[derive(Debug)]
 pub struct Rule {
@@ -25,7 +24,7 @@ pub fn rules_inbound() -> Vec<Rule> {
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-930-APPLICATION-ATTACK-LFI.conf#L23
         // [ Encoded /../ Payloads ]
-        // index 0
+        // index 0, duration 21ms
         Rule {
             id: 930100,
             class: "LFI".to_string(),
@@ -35,7 +34,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
         
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-931-APPLICATION-ATTACK-RFI.conf#L26
-        // index 1
+        // index 1, duration 13ms
         Rule {
             id: 931100,
             class: "RFI".to_string(),
@@ -45,7 +44,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-931-APPLICATION-ATTACK-RFI.conf#L57
-        // index 2
+        // index 2, duration 13ms
         Rule {
             id: 931110,
             class: "RFI".to_string(),
@@ -55,7 +54,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-931-APPLICATION-ATTACK-RFI.conf#L77C20-L77C48
-        // index 3
+        // index 3, duration 7ms
         Rule {
             id: 931120,
             class: "RFI".to_string(),
@@ -65,7 +64,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-931-APPLICATION-ATTACK-RFI.conf#L116
-        // index 4
+        // index 4, duration 21ms
         Rule {
             id: 931130,
             class: "RFI".to_string(),
@@ -75,7 +74,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf#L121C1-L121C1
-        // index 5
+        // index 5, duration 21ms
         Rule {
             id: 932230,
             class: "RCE".to_string(),
@@ -85,7 +84,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf#L181C1-L181C1 
-        // index 6
+        // index 6, duration 152ms
         Rule {
             id: 932235,
             class: "RCE".to_string(),
@@ -95,7 +94,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf#L291
-        // index 7
+        // index 7, duration 1ms
         Rule {
             id: 932130,
             class: "RCE".to_string(),
@@ -105,7 +104,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf#L419
-        // index 8
+        // index 8, duration 15ms
         Rule {
             id: 932250,
             class: "RCE".to_string(),
@@ -115,7 +114,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf#L478
-        // index 9
+        // index 9, duration 33ms
         Rule {
             id: 932260,
             class: "RCE".to_string(),
@@ -125,7 +124,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf#L518
-        // index 10
+        // index 10, duration 13ms
         Rule {
             id: 932330,
             class: "RCE".to_string(),
@@ -135,7 +134,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf#L590
-        // index 11
+        // index 11, duration 0ms
         Rule {
             id: 932170,
             class: "RCE".to_string(),
@@ -145,7 +144,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf#L653 
-        // index 12
+        // index 12, duration 7ms
         Rule {
             id: 932175,
             class: "RCE".to_string(),
@@ -155,7 +154,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf#L962
-        // index 13
+        // index 13, duration 0ms
         Rule {
             id: 932200,
             class: "RCE".to_string(),
@@ -165,7 +164,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf#L1073
-        // index 14
+        // index 14, duration 73ms
         Rule {
             id: 932220,
             class: "RCE".to_string(),
@@ -175,7 +174,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf#L1136
-        // index 15
+        // index 15, duration 13ms
         Rule {
             id: 932240,
             class: "RCE".to_string(),
@@ -185,7 +184,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf#L1179
-        // index 16
+        // index 16, duration 20ms
         Rule {
             id: 932210,
             class: "RCE".to_string(),
@@ -195,7 +194,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf#L1221
-        // index 17
+        // index 17, duration 202ms
         Rule {
             id: 932300,
             class: "RCE".to_string(),
@@ -205,7 +204,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf#L1253
-        // index 18
+        // index 18, duration 1ms
         Rule {
             id: 932310,
             class: "RCE".to_string(),
@@ -215,7 +214,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf#L1287
-        // index 19
+        // index 19, duration 25ms
         Rule {
             id: 932320,
             class: "RCE".to_string(),
@@ -225,7 +224,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf#L1347
-        // index 20
+        // index 20, duration 100ms
         Rule {
             id: 932236,
             class: "RCE".to_string(),
@@ -235,7 +234,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf#L1510
-        // index 21
+        // index 21, duration 27ms
         Rule {
             id: 932232,
             class: "RCE".to_string(),
@@ -245,7 +244,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf#L1567
-        // index 22
+        // index 22, duration 39ms
         Rule {
             id: 932238,
             class: "RCE".to_string(),
@@ -255,7 +254,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf#L1660
-        // index 23
+        // index 23, duration 6ms
         Rule {
             id: 932190,
             class: "RCE".to_string(),
@@ -265,7 +264,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf#L1696
-        // index 24
+        // index 24, duration 14ms
         Rule {
             id: 932301,
             class: "RCE".to_string(),
@@ -275,7 +274,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf#L1729
-        // index 25
+        // index 25, duration 100ms
         Rule {
             id: 932311,
             class: "RCE".to_string(),
@@ -285,7 +284,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf#L1762
-        // index 26
+        // index 26, duration 0ms
         Rule {
             id: 932321,
             class: "RCE".to_string(),
@@ -295,7 +294,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-932-APPLICATION-ATTACK-RCE.conf#L1794
-        // index 27
+        // index 27, duration 0ms
         Rule {
             id: 932331,
             class: "RCE".to_string(),
@@ -305,7 +304,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-934-APPLICATION-ATTACK-GENERIC.conf#L52
-        // index 28
+        // index 28, duration 1ms
         Rule {
             id: 934100,
             class: "DESERIAL".to_string(),
@@ -315,7 +314,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-934-APPLICATION-ATTACK-GENERIC.conf#L122
-        // index 29
+        // index 29, duration 0ms
         Rule {
             id: 934130,
             class: "PP".to_string(),
@@ -325,7 +324,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-934-APPLICATION-ATTACK-GENERIC.conf#L154
-        // index 30
+        // index 30, duration 0ms
         Rule {
             id: 934150,
             class: "RCE".to_string(),
@@ -335,7 +334,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-934-APPLICATION-ATTACK-GENERIC.conf#L185
-        // index 31
+        // index 31, duration 31ms
         Rule {
             id: 934160,
             class: "DOS".to_string(),
@@ -345,7 +344,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-934-APPLICATION-ATTACK-GENERIC.conf#L243
-        // index 32
+        // index 32, duration 0ms
         Rule {
             id: 934101,
             class: "DESERIAL".to_string(),
@@ -355,7 +354,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-934-APPLICATION-ATTACK-GENERIC.conf#L296
-        // index 33
+        // index 33, duration 22ms
         Rule {
             id: 934120,
             class: "SSRF".to_string(),
@@ -365,7 +364,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-941-APPLICATION-ATTACK-XSS.conf#L106
-        // index 34
+        // index 34, duration 119ms
         Rule {
             id: 941110,
             class: "XSS".to_string(),
@@ -375,7 +374,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-941-APPLICATION-ATTACK-XSS.conf#L136
-        // index 35
+        // index 35, duration 1ms
         Rule {
             id: 941130,
             class: "XSS".to_string(),
@@ -385,7 +384,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-941-APPLICATION-ATTACK-XSS.conf#L165
-        // index 36
+        // index 36, duration 6ms
         Rule {
             id: 941140,
             class: "XSS".to_string(),
@@ -395,7 +394,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-941-APPLICATION-ATTACK-XSS.conf#L198
-        // index 37
+        // index 37, duration 59ms
         Rule {
             id: 941160,
             class: "XSS".to_string(),
@@ -405,7 +404,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-941-APPLICATION-ATTACK-XSS.conf#L579
-        // index 38
+        // index 38, duration 19ms
         Rule {
             id: 941310,
             class: "XSS".to_string(),
@@ -415,7 +414,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-941-APPLICATION-ATTACK-XSS.conf#L609
-        // index 39
+        // index 39, duration 1ms
         Rule {
             id: 941350,
             class: "XSS".to_string(),
@@ -425,7 +424,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-941-APPLICATION-ATTACK-XSS.conf#L652
-        // index 40
+        // index 40, duration 0ms
         Rule {
             id: 941360,
             class: "XSS".to_string(),
@@ -435,7 +434,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-941-APPLICATION-ATTACK-XSS.conf#L680
-        // index 41
+        // index 41, duration 6ms
         Rule {
             id: 941370,
             class: "XSS".to_string(),
@@ -445,7 +444,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-941-APPLICATION-ATTACK-XSS.conf#L712
-        // index 42
+        // index 42, duration 0ms
         Rule {
             id: 941390,
             class: "XSS".to_string(),
@@ -455,7 +454,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-941-APPLICATION-ATTACK-XSS.conf#L742
-        // index 43
+        // index 43, duration 0ms
         Rule {
             id: 941400,
             class: "XSS".to_string(),
@@ -465,7 +464,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-941-APPLICATION-ATTACK-XSS.conf#L806
-        // index 44
+        // index 44, duration 0ms
         Rule {
             id: 941120,
             class: "XSS".to_string(),
@@ -475,7 +474,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-941-APPLICATION-ATTACK-XSS.conf#L832C144-L832C182
-        // index 45
+        // index 45, duration 92ms
         Rule {
             id: 941150,
             class: "XSS".to_string(),
@@ -485,7 +484,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-941-APPLICATION-ATTACK-XSS.conf#L947
-        // index 46
+        // index 46, duration 14ms
         Rule {
             id: 941320,
             class: "XSS".to_string(),
@@ -495,7 +494,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-941-APPLICATION-ATTACK-XSS.conf#L969
-        // index 47
+        // index 47, duration 7ms
         Rule {
             id: 941330,
             class: "XSS".to_string(),
@@ -505,7 +504,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-941-APPLICATION-ATTACK-XSS.conf#L994
-        // index 48
+        // index 48, duration 0ms
         Rule {
             id: 941340,
             class: "XSS".to_string(),
@@ -515,7 +514,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-941-APPLICATION-ATTACK-XSS.conf#L1029
-        // index 49
+        // index 49, duration 0ms
         Rule {
             id: 941380,
             class: "TEMPLATE".to_string(),
@@ -525,7 +524,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L77
-        // index 50
+        // index 50, duration 21ms
         Rule {
             id: 942140,
             class: "SQLI".to_string(),
@@ -535,7 +534,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L110
-        // index 51
+        // index 51, duration 53ms
         Rule {
             id: 942151,
             class: "SQLI".to_string(),
@@ -545,7 +544,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L179
-        // index 52
+        // index 52, duration 0ms
         Rule {
             id: 942170,
             class: "SQLI".to_string(),
@@ -555,7 +554,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L205
-        // index 53
+        // index 53, duration 13ms
         Rule {
             id: 942190,
             class: "SQLI".to_string(),
@@ -565,7 +564,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L255
-        // index 54
+        // index 54, duration 13ms
         Rule {
             id: 942230,
             class: "SQLI".to_string(),
@@ -575,7 +574,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L281
-        // index 55
+        // index 55, duration 0ms
         Rule {
             id: 942240,
             class: "SQLI".to_string(),
@@ -585,7 +584,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L302
-        // index 56
+        // index 56, duration 20ms
         Rule {
             id: 942250,
             class: "SQLI".to_string(),
@@ -595,7 +594,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L323
-        // index 57
+        // index 57, duration 0ms
         Rule {
             id: 942270,
             class: "SQLI".to_string(),
@@ -605,7 +604,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         }, 
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L349
-        // index 58
+        // index 58, duration 0ms
         Rule {
             id: 942280,
             class: "SQLI".to_string(),
@@ -615,7 +614,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L375
-        // index 59
+        // index 59, duration 1ms
         Rule {
             id: 942290,
             class: "NOSQLI".to_string(),
@@ -625,7 +624,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L404
-        // index 60
+        // index 60, duration 38ms
         Rule {
             id: 942320,
             class: "SQLI".to_string(),
@@ -635,7 +634,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L430C1-L430C1
-        // index 61
+        // index 61, duration 0ms
         Rule {
             id: 942350,
             class: "SQLI".to_string(),
@@ -645,7 +644,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L469
-        // index 62
+        // index 62, duration 21ms
         Rule {
             id: 942360,
             class: "SQLI".to_string(),
@@ -655,7 +654,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L505
-        // index 63
+        // index 63, duration 7ms
         Rule {
             id: 942500,
             class: "SQLI".to_string(),
@@ -665,7 +664,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L541
-        // index 64
+        // index 64, duration 19ms
         Rule {
             id: 942540,
             class: "SQLI".to_string(),
@@ -675,7 +674,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L571
-        // index 65
+        // index 65, duration 0ms
         Rule {
             id: 942560,
             class: "SQLI".to_string(),
@@ -685,7 +684,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L600
-        // index 66
+        // index 66, duration 1ms
         Rule {
             id: 942550,
             class: "SQLI".to_string(),
@@ -695,7 +694,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L670
-        // index 67
+        // index 67, duration 20ms
         Rule {
             id: 942120,
             class: "SQLI".to_string(),
@@ -705,7 +704,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L711
-        // index 68
+        // index 68, duration 0ms
         Rule {
             id: 942130,
             class: "SQLI".to_string(),
@@ -715,7 +714,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L747
-        // index 69
+        // index 69, duration 0ms
         Rule {
             id: 942131,
             class: "SQLI".to_string(),
@@ -725,7 +724,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L784
-        // index 70
+        // index 70, duration 14ms
         Rule {
             id: 942150,
             class: "SQLI".to_string(),
@@ -735,7 +734,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L827
-        // index 71
+        // index 71, duration 19ms
         Rule {
             id: 942180,
             class: "SQLI".to_string(),
@@ -745,7 +744,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L856
-        // index 72
+        // index 72, duration 1ms
         Rule {
             id: 942200,
             class: "SQLI".to_string(),
@@ -755,7 +754,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L885
-        // index 73
+        // index 73, duration 19ms
         Rule {
             id: 942210,
             class: "SQLI".to_string(),
@@ -765,7 +764,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L911
-        // index 74
+        // index 74, duration 1ms
         Rule {
             id: 942260,
             class: "SQLI".to_string(),
@@ -775,7 +774,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L937
-        // index 75
+        // index 75, duration 1ms
         Rule {
             id: 942300,
             class: "SQLI".to_string(),
@@ -785,7 +784,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L963
-        // index 76
+        // index 76, duration 19ms
         Rule {
             id: 942310,
             class: "SQLI".to_string(),
@@ -795,7 +794,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L997
-        // index 77
+        // index 77, duration 1ms
         Rule {
             id: 942330,
             class: "SQLI".to_string(),
@@ -805,18 +804,17 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L1026
-        // index 78
+        // index 78, duration 25ms
         Rule {
             id: 942340,
             class: "SQLI".to_string(),
             severity: "CRITICAL".to_string(),
             desc: "Detects basic SQL authentication bypass attempts 3/3".to_string(),
-            //re: r#"(?i)in[\s\v]*?\(+[\s\v]*?select|(?:(?:(?i:N)?AND|(?i:X)?(?i:X)?OR|DIV|LIKE|BETWEEN|NOT)[\s\v]+|(?:\|\||&&)[\s\v]*)[\s\v\+0-9A-Z_a-z]+(?:regexp[\s\v]*?\(|sounds[\s\v]+like[\s\v]*?["'`]|[0-9=]+x)|["'`](?:[\s\v]*?(?:[0-9][\s\v]*?(?:--|#)|is[\s\v]*?(?:[0-9].+["'`]?[0-9A-Z_a-z]|[\.0-9]+[\s\v]*?[^0-9A-Z_a-z].*?["'`]))|[%-&<->\^]+[0-9][\s\v]*?(?:=|x?or|div|like|between|and)|(?:[^0-9A-Z_a-z]+[\+\-0-9A-Z_a-z]+[\s\v]*?=[\s\v]*?[0-9][^0-9A-Z_a-z]+|\|?[\-0-9A-Z_a-z]{3,}[^\s\v,\.\\0-9A-Z_a-z]+)["'`]|[\s\v]*(?:(?:(?i:N)?AND|(?i:X)?(?i:X)?OR|DIV|LIKE|BETWEEN|NOT)[\s\v]+|(?:\|\||&&)[\s\v]*)(?:array[\s\v]*\[|[0-9A-Z_a-z]+(?:[\s\v]*!?~|[\s\v]+(?:not[\s\v]+)?similar[\s\v]+to[\s\v]+)|(?:tru|fals)e\b))|\bexcept[\s\v]+(?:select\b|values[\s\v]*?\()"#.to_string(),
-            re: r#"dfasjdflsjdfjsdfjsdfjlkasjdf"#.to_string()
+            re: r#"(?i)in[\s\v]*?\(+[\s\v]*?select|(?:(?:(?i:N)?AND|(?i:X)?(?i:X)?OR|DIV|LIKE|BETWEEN|NOT)[\s\v]+|(?:\|\||&&)[\s\v]*)[\s\v\+0-9A-Z_a-z]+(?:regexp[\s\v]*?\(|sounds[\s\v]+like[\s\v]*?["'`]|[0-9=]+x)|["'`](?:[\s\v]*?(?:[0-9][\s\v]*?(?:--|#)|is[\s\v]*?(?:[0-9].+["'`]?[0-9A-Z_a-z]|[\.0-9]+[\s\v]*?[^0-9A-Z_a-z].*?["'`]))|[%-&<->\^]+[0-9][\s\v]*?(?:=|x?or|div|like|between|and)|(?:[^0-9A-Z_a-z]+[\+\-0-9A-Z_a-z]+[\s\v]*?=[\s\v]*?[0-9][^0-9A-Z_a-z]+\|?[\-0-9A-Z_a-z]{3,}[^\s\v,\.\\0-9A-Z_a-z]+)["'`]|[\s\v]*(?:(?:(?i:N)?AND|(?i:X)?(?i:X)?OR|DIV|LIKE|BETWEEN|NOT)[\s\v]+|(?:\|\||&&)[\s\v]*)(?:array[\s\v]*\[|[0-9A-Z_a-z]+(?:[\s\v]*!?~|[\s\v]+(?:not[\s\v]+)?similar[\s\v]+to[\s\v]+)|(?:tru|fals)e\b))|\bexcept[\s\v]+(?:select\b|values[\s\v]*?\()"#.to_string()
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L1051
-        // index 79
+        // index 79, duration 8ms
         Rule {
             id: 942361,
             class: "SQLI".to_string(),
@@ -826,7 +824,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L1081
-        // index 80
+        // index 80, duration 45ms
         Rule {
             id: 942362,
             class: "SQLI".to_string(),
@@ -836,7 +834,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L1113
-        // index 81
+        // index 81, duration 7ms
         Rule {
             id: 942370,
             class: "SQLI".to_string(),
@@ -846,7 +844,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L1139
-        // index 82
+        // index 82, duration 8ms
         Rule {
             id: 942380,
             class: "SQLI".to_string(),
@@ -856,7 +854,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L1165
-        // index 83
+        // index 83, duration 1ms
         Rule {
             id: 942390,
             class: "SQLI".to_string(),
@@ -866,7 +864,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L1191
-        // index 84
+        // index 84, duration 19ms
         Rule {
             id: 942400,
             class: "SQLI".to_string(),
@@ -876,7 +874,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L1222
-        // index 85
+        // index 85, duration 33ms
         Rule {
             id: 942410,
             class: "SQLI".to_string(),
@@ -886,7 +884,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L1251
-        // index 86
+        // index 86, duration 8ms
         Rule {
             id: 942470,
             class: "SQLI".to_string(),
@@ -896,7 +894,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L1280
-        // index 87
+        // index 87, duration 79ms
         Rule {
             id: 942480,
             class: "SQLI".to_string(),
@@ -906,7 +904,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L1321
-        // index 88
+        // index 88, duration 7ms
         Rule {
             id: 942430,
             class: "SQLI".to_string(),
@@ -916,7 +914,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L1379
-        // index 89
+        // index 89, duration 0ms
         Rule {
             id: 942440,
             class: "SQLI".to_string(),
@@ -926,7 +924,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L1410
-        // index 90
+        // index 90, duration 19ms
         Rule {
             id: 942450,
             class: "SQLI".to_string(),
@@ -936,7 +934,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L1459
-        // index 91
+        // index 91, duration 161ms
         Rule {
             id: 942510,
             class: "SQLI".to_string(),
@@ -946,7 +944,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L1486
-        // index 92
+        // index 92, duration 13ms
         Rule {
             id: 942520,
             class: "SQLI".to_string(),
@@ -956,7 +954,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L1546C37-L1546C80
-        // index 93
+        // index 93, duration 0ms
         Rule {
             id: 942522,
             class: "SQLI".to_string(),
@@ -966,7 +964,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L1616C65-L1616C2566
-        // index 94
+        // index 94, duration 60ms
         Rule {
             id: 942152,
             class: "SQLI".to_string(),
@@ -976,7 +974,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L1686C100-L1686C136
-        // index 95
+        // index 95, duration 13ms
         Rule {
             id: 942251,
             class: "SQLI".to_string(),
@@ -986,7 +984,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf#L1710
-        // index 96
+        // index 96, duration 20ms
         Rule {
             id: 942490,
             class: "SQLI".to_string(),
@@ -996,7 +994,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-943-APPLICATION-ATTACK-SESSION-FIXATION.conf#L31C100-L31C174
-        // index 97
+        // index 97, duration 21ms
         Rule {
             id: 943100,
             class: "FIXATION".to_string(),
@@ -1006,7 +1004,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-943-APPLICATION-ATTACK-SESSION-FIXATION.conf#L52C25-L52C174
-        // index 98
+        // index 98, duration 19ms
         Rule {
             id: 943110,
             class: "FIXATION".to_string(),
@@ -1016,7 +1014,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-944-APPLICATION-ATTACK-JAVA.conf#L33
-        // index 99
+        // index 99, duration 0ms
         Rule {
             id: 944100,
             class: "RCE".to_string(),
@@ -1026,7 +1024,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-944-APPLICATION-ATTACK-JAVA.conf#L66
-        // index 100
+        // index 100, duration 0ms
         Rule {
             id: 944110,
             class: "RCE".to_string(),
@@ -1036,7 +1034,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-944-APPLICATION-ATTACK-JAVA.conf#L91
-        // index 101
+        // index 101, duration 1ms
         Rule {
             id: 944120,
             class: "RCE".to_string(),
@@ -1046,7 +1044,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-944-APPLICATION-ATTACK-JAVA.conf#L162C129-L162C149
-        // index 102
+        // index 102, duration 0ms
         Rule {
             id: 944140,
             class: "UPLOAD".to_string(),
@@ -1056,7 +1054,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-944-APPLICATION-ATTACK-JAVA.conf#L210
-        // index 103
+        // index 103, duration 1ms
         Rule {
             id: 944150,
             class: "RCE".to_string(),
@@ -1066,7 +1064,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-944-APPLICATION-ATTACK-JAVA.conf#L280
-        // index 104
+        // index 104, duration 0ms
         Rule {
             id: 944200,
             class: "DESERIAL".to_string(),
@@ -1076,7 +1074,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-944-APPLICATION-ATTACK-JAVA.conf#L301
-        // index 105
+        // index 105, duration 0ms
         Rule {
             id: 944210,
             class: "DESERIAL".to_string(),
@@ -1086,7 +1084,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-944-APPLICATION-ATTACK-JAVA.conf#L321
-        // index 106
+        // index 106, duration 0ms
         Rule {
             id: 944240,
             class: "DESERIAL".to_string(),
@@ -1096,7 +1094,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-944-APPLICATION-ATTACK-JAVA.conf#L345
-        // index 107
+        // index 107, duration 19ms
         Rule {
             id: 944250,
             class: "RCE".to_string(),
@@ -1106,7 +1104,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-944-APPLICATION-ATTACK-JAVA.conf#L371C10-L371C145
-        // index 108
+        // index 108, duration 0ms
         Rule {
             id: 944260,
             class: "RCE".to_string(),
@@ -1116,7 +1114,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-944-APPLICATION-ATTACK-JAVA.conf#L404
-        // index 109
+        // index 109, duration 20ms
         Rule {
             id: 944300,
             class: "RCE".to_string(),
@@ -1126,7 +1124,7 @@ pub fn rules_inbound() -> Vec<Rule> {
         },
 
         // https://github.com/coreruleset/coreruleset/blob/v4.0/dev/rules/REQUEST-944-APPLICATION-ATTACK-JAVA.conf#L441C113-L441C157
-        // index 110
+        // index 110, duration 1ms
         Rule {
             id: 944152,
             class: "RCE".to_string(),
@@ -1144,8 +1142,10 @@ pub fn rules_inbound() -> Vec<Rule> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    
-    
+    use regex::Regex;
+    use hyper::body::Bytes;
+    use std::str;
+
     #[test]
     fn rule_rce_944152_true() {
         let rules = rules_inbound();
@@ -2542,6 +2542,19 @@ mod tests {
             assert!(cap.is_empty());
             assert_eq!(cap, "");
         }
+    }
+
+
+    #[test]
+    fn rule_942340_false() {
+        let rules = rules_inbound();
+        let rule = &rules[78];
+        let data: Bytes =  Bytes::from_static(b"{\"key1\":\"value1\"}");
+        let cap = search(rule, data);
+        println!("Cap: {:?}", cap);
+        
+        assert!(cap.is_empty());
+        assert_eq!(cap, "");
     }
 
 
