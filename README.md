@@ -1,18 +1,15 @@
 # Lambda RASP
-This runtime application self-protection (RASP) solution is designed for AWS Lambda functions.  Lambda-rasp is added to existing functions as a layer/extension and runs within the targeted function.  When the function is started, the lambda-rasp layer modifies the container's memory replacing AWS's native runtime API with a new socket value pointing to a local web server setup by lambda-rasp on initialization.  Events passed to the function then go directly to lambda-rasp *before* reaching the function's application handler.  This positions lambda-rasp as an inspection point where many OWASP ModSecurity regex rules have been hardcoded to check incomping events for malicious strings.  If a malicious string is detected lambda-rasp will describe the rules violated and kill further processing *before* the event would be passed to the function's application.
+This runtime application self-protection (RASP) solution is designed for AWS Lambda functions.  Lambda-rasp is added to existing functions as a layer/extension and runs within the targeted function.  When the function is initialized, the lambda-rasp layer modifies the container's memory replacing AWS's native runtime API with a new socket value pointing to a local web server.  Events passed to the function then go directly to lambda-rasp *before* reaching the function's application handler.  This positions lambda-rasp as an inspection point where many OWASP ModSecurity regex rules have been hardcoded to check incoming events for malicious strings.  If a malicious string is detected lambda-rasp will describe the rules violated as standard output and kill further processing *before* the event would be passed to the function's application.
 
 
 # Configuration
 > Consider the Performance section for config setting guidance
 The following constants are set in `src/main.rs` and are used to tune and troubleshoot lambda-rasp deployments based on your needs:
-- VERBOSE: display debug messages
-- FAIL_OPEN: run lambda if layer fails
-- BLOCKING_MODE: Kill lambda if Rule violated
-- RULE_MODE: Performance vs security tuning:
-  0=performance, rule run durations 0-10ms
-  1=balanced, rule run duration 11-99ms
-  2=paranoid, rule run durations 100+ms
-- RULE_CLASS: Set the classes of rules to apply.  Limited by RULE_MODE.  For example, if RFI RULE_CLASS is selected with RULE_MODE 0, only the RFI rules in mode 0 will be used.
+- `VERBOSE`: display debug messages
+- `FAIL_OPEN`: run lambda if layer fails
+- `BLOCKING_MODE`: Kill lambda if rule violated
+- `RULE_MODE`: Performance vs security tuning:  0=performance, rule run durations 0-10ms;  1=balanced, rule run duration 11-99ms;  2=paranoid, rule run durations 100+ms
+- `RULE_CLASS`: Set the classes of rules to apply.  Limited by RULE_MODE.  For example, if RFI RULE_CLASS is selected with RULE_MODE 0, only the RFI rules in mode 0 will be used.
 
 **Class counts by mode**
 | Class | Mode 0 | Mode 1 | Mode 2 |
@@ -38,7 +35,7 @@ The following table offers example time costs of running lambda-rasp using vario
 | --- | --- | --- |
 | 0 | null | ~8ms |
 | 0 | RCE | ~148ms |
-| 0 | RCE, SQLI | 310ms |
+| 0 | RCE, SQLI | ~310ms |
 | 1 | RCE, SQLI | ~1100ms |
 | 1 | all | ~1579ms |
 | 2 | all | ~2419ms |
